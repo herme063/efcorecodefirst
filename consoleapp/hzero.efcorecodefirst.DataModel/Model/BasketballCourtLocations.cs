@@ -1,4 +1,4 @@
-﻿namespace hzero.efcodefirst.DataModel
+﻿namespace hzero.efcorecodefirst.DataModel
 {
     public enum BasketballCourtLocations
     {
