@@ -1,0 +1,8 @@
+﻿.rating {
+    font-size: 1.2em;
+    color: black;
+
+    &.checked {
+        color: orangered;
+    }
+}

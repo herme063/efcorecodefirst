@@ -11,14 +11,22 @@ namespace hzero.efcorecodefirst.Lib
 	{
 		private static IServiceProvider _provider;
 
-		static ServiceFinder()
+		public static void Configure(IServiceCollection services)
 		{
 			var serviceCollection = new ServiceCollection();
-			serviceCollection.AddTransient<IAppSettings>(sp => new ConfigurationBuilder()
-				.AddJsonFile("appsettings.json", true, true)
-				.Build()
-				.GetSection("efcorecodefirstSettings")
-				.Get<AppSettings>());
+			serviceCollection.AddTransient<IAppSettings>(sp => {
+				IConfiguration configuration = new ConfigurationBuilder()
+					.AddJsonFile("appsettings.json", true, true)
+					.Build();
+				var appSettings = configuration
+					.GetSection("efcorecodefirstSettings")
+					.Get<AppSettings>();
+				appSettings.ConnectionStrings = configuration
+					.GetSection("ConnectionStrings")
+					.Get<AppSettingsConnectionString[]>();
+
+				return appSettings;
+			});
 
 			// find all class that implements IConfigureService
 			foreach (IConfigureService cfg in GetServiceConfigurators())
@@ -30,7 +38,7 @@ namespace hzero.efcorecodefirst.Lib
 		}
 
 		public static TService Find<TService>()
-			=> _provider.GetService<TService>();
+			=> _provider != null ? _provider.GetService<TService>() : throw new InvalidOperationException("need to call Configure()");
 
 		private static IEnumerable<IConfigureService> GetServiceConfigurators()
 		{

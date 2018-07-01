@@ -1,10 +1,10 @@
 Run from the solution folder
 
 -- Add a new migration
-dotnet ef migrations add <MigrationNameNoSpacePascalCase> -s consoleapp\consoleapp.csproj -p <TargetProjectPath>
+dotnet ef migrations add <MigrationNameNoSpacePascalCase> -s hzero.efcorecodefirst.web\hzero.efcorecodefirst.web.csproj -p <TargetProjectPath>
 
 -- Remove an existing migration
-dotnet ef migrations remove <MigrationNameNoSpacePascalCase> -s consoleapp\consoleapp.csproj -p <TargetProjectPath>
+dotnet ef migrations remove <MigrationNameNoSpacePascalCase> -s hzero.efcorecodefirst.web\hzero.efcorecodefirst.web.csproj -p <TargetProjectPath>
 
 -- Script out all migrations
-dotnet ef migrations script -s consoleapp\consoleapp.csproj -p <TargetProjectPath> -o <ScriptName>.sql
+dotnet ef migrations script -s hzero.efcorecodefirst.web\hzero.efcorecodefirst.web.csproj -p <TargetProjectPath> -o <ScriptName>.sql

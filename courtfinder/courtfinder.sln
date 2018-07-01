@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "consoleapp", "consoleapp\consoleapp.csproj", "{D3F14886-9883-4586-9F3B-117099360F01}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hzero.efcorecodefirst.Lib", "hzero.efcorecodefirst.Lib\hzero.efcorecodefirst.Lib.csproj", "{BD7AB94E-106A-48C8-BC77-DBCD1D893F84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hzero.efcorecodefirst.Lib", "hzero.efcorecodefirst.Lib\hzero.efcorecodefirst.Lib.csproj", "{BD7AB94E-106A-48C8-BC77-DBCD1D893F84}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hzero.efcorecodefirst.DataModel", "hzero.efcorecodefirst.DataModel\hzero.efcorecodefirst.DataModel.csproj", "{EE793FBB-84FA-42B7-A5C3-86A95F0AB13D}"
 EndProject
@@ -14,16 +12,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution items", "solution 
 		migration_notes.txt = migration_notes.txt
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hzero.efcorecodefirst.web", "hzero.efcorecodefirst.web\hzero.efcorecodefirst.web.csproj", "{E9E5A80A-7CF6-40D1-82CD-311CCF3EBC13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D3F14886-9883-4586-9F3B-117099360F01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D3F14886-9883-4586-9F3B-117099360F01}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D3F14886-9883-4586-9F3B-117099360F01}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D3F14886-9883-4586-9F3B-117099360F01}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BD7AB94E-106A-48C8-BC77-DBCD1D893F84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BD7AB94E-106A-48C8-BC77-DBCD1D893F84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD7AB94E-106A-48C8-BC77-DBCD1D893F84}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -32,6 +28,10 @@ Global
 		{EE793FBB-84FA-42B7-A5C3-86A95F0AB13D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE793FBB-84FA-42B7-A5C3-86A95F0AB13D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE793FBB-84FA-42B7-A5C3-86A95F0AB13D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9E5A80A-7CF6-40D1-82CD-311CCF3EBC13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9E5A80A-7CF6-40D1-82CD-311CCF3EBC13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9E5A80A-7CF6-40D1-82CD-311CCF3EBC13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9E5A80A-7CF6-40D1-82CD-311CCF3EBC13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
