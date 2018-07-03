@@ -11,10 +11,14 @@ namespace hzero.efcorecodefirst.Lib
 	{
 		private static IServiceProvider _provider;
 
+		static ServiceFinder()
+		{
+			Configure(new ServiceCollection());
+		}
+
 		public static void Configure(IServiceCollection services)
 		{
-			var serviceCollection = new ServiceCollection();
-			serviceCollection.AddTransient<IAppSettings>(sp => {
+			services.AddTransient<IAppSettings>(sp => {
 				IConfiguration configuration = new ConfigurationBuilder()
 					.AddJsonFile("appsettings.json", true, true)
 					.Build();
@@ -31,10 +35,10 @@ namespace hzero.efcorecodefirst.Lib
 			// find all class that implements IConfigureService
 			foreach (IConfigureService cfg in GetServiceConfigurators())
 			{
-				cfg.Configure(serviceCollection);
+				cfg.Configure(services);
 			}
 
-			_provider = serviceCollection.BuildServiceProvider();
+			_provider = services.BuildServiceProvider();
 		}
 
 		public static TService Find<TService>()

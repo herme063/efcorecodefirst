@@ -21,7 +21,7 @@ namespace hzero.efcorecodefirst.web
 		{
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-			// add a hook for service finder
+			// add a hook for service finder...this should be the last call
 			ServiceFinder.Configure(services);
 		}
 
@@ -36,10 +36,10 @@ namespace hzero.efcorecodefirst.web
 			}
 			else
 			{
+				app.UseHttpsRedirection();
 				app.UseHsts();
 			}
 
-			app.UseHttpsRedirection();
 			app.UseMvc();
 		}
 	}

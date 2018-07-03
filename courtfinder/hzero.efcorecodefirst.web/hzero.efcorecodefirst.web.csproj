@@ -1,16 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\app\classic\src\view\" />
+    <Compile Remove="wwwroot\app\classic\**" />
+    <Content Remove="wwwroot\app\classic\**" />
+    <EmbeddedResource Remove="wwwroot\app\classic\**" />
+    <None Remove="wwwroot\app\classic\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\app\overrides\" />
+    <Folder Include="wwwroot\app\packages\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>

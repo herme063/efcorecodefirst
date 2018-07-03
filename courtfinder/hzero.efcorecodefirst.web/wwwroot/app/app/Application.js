@@ -9,7 +9,7 @@ Ext.define('CourtFinderApp.Application', {
     name: 'CourtFinderApp',
 
     quickTips: false,
-    defaultToken: '#search',
+	defaultToken: '#search',
     platformConfig: {
         desktop: {
             quickTips: true
