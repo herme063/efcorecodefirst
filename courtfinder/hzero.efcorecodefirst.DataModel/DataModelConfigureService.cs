@@ -1,4 +1,5 @@
-﻿using hzero.efcorecodefirst.Lib;
+﻿using hzero.efcorecodefirst.DataModel.Service;
+using hzero.efcorecodefirst.Lib;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace hzero.efcorecodefirst.DataModel
@@ -7,7 +8,7 @@ namespace hzero.efcorecodefirst.DataModel
 	{
 		public void Configure(IServiceCollection serviceCollection)
 		{
-			// no service to configure
+			serviceCollection.AddTransient<ICourtService, CourtService>();
 		}
 	}
 }

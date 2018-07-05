@@ -8,7 +8,8 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
     },
 
     onSearchRoute: function () {
-        var navigationView = this.getView().down('#navigationView');
+        var me = this,
+            navigationView = me.getView().down('#navigationView');
         navigationView.setActiveItem(0);
     },
 
@@ -63,10 +64,7 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
     getGeocode: function (location) {
         var me = this,
             googleMap = me.getView().down('#mapView').getMap();
-        if (googleMap._idleListener) {
-            google.maps.event.removeListener(me._idleListener);
-            delete googleMap._idleListener;
-        }
+        me.removeIdleListener(googleMap);
 
         Ext.Ajax.request({
             url: '../api/CourtFinder/FindLocation',
@@ -75,17 +73,9 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
 
             success: function (response, opts) {
                 var result = JSON.parse(response.responseText);
-                googleMap._idleListener = googleMap.addListener('idle', function () {
-                    var bounds = googleMap.getBounds(),
-                        swBound = bounds.getSouthWest(),
-                        neBound = bounds.getNorthEast();
-                    me.findCourtsWithinBounds(
-                        { lat: swBound.lat(), lng: swBound.lng() },
-                        { lat: neBound.lat(), lng: neBound.lng() }
-                    );
-                });
                 googleMap.setZoom(14);
                 googleMap.panTo({ lat: result.lat, lng: result.lng });
+                me.addIdleListener(googleMap);
             },
 
             failure: function (response, opts) {
@@ -117,7 +107,7 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
                     me.addMarker(googleMap, r);
                 });
 
-                me.redirectTo('search');
+                //me.redirectTo('search');
             },
 
             failure: function (response, opts) {
@@ -150,7 +140,7 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
                 },
                 _infoWindow: new google.maps.InfoWindow({
                     content: me.getMarkerInfoTpl(data),
-                    maxWidth: 200,
+                    maxWidth: 450,
                     disableAutoPan: true
                 }),
                 _data: data
@@ -162,15 +152,35 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
             m._infoWindow.open(googleMap, m);
         });
         m.addListener('mouseout', function () {
-            m._infoWindow.close(googleMap, m);
+           // m._infoWindow.close(googleMap, m);
         });
         (googleMap._markers || (googleMap._markers = [])).push(m);
     },
 
     getMarkerInfoTpl: function (data) {
         var me = this,
-            resultView = me.getView().down('#resultView'),
-            itemTpl = resultView.getItemTpl();
-        return itemTpl.apply(data);
+            resultView = me.getView().down('#resultView');
+        return resultView.infoTpl.apply(data);
+    },
+
+    removeIdleListener: function (googleMap) {
+        if (googleMap._idleListener) {
+            google.maps.event.removeListener(googleMap._idleListener);
+            delete googleMap._idleListener;
+        }
+    },
+
+    addIdleListener: function (googleMap) {
+        var me = this;
+        me.removeIdleListener(googleMap);
+        googleMap._idleListener = googleMap.addListener('idle', function () {
+            var bounds = googleMap.getBounds(),
+                swBound = bounds.getSouthWest(),
+                neBound = bounds.getNorthEast();
+            me.findCourtsWithinBounds(
+                { lat: swBound.lat(), lng: swBound.lng() },
+                { lat: neBound.lat(), lng: neBound.lng() }
+            );
+        });
     }
 });

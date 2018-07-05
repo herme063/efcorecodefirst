@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using hzero.efcorecodefirst.DataModel;
@@ -9,9 +10,10 @@ using hzero.efcorecodefirst.DataModel;
 namespace hzero.efcorecodefirst.DataModel.Migrations
 {
     [DbContext(typeof(DataModelDbContext))]
-    partial class DataModelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180705195540_ModelsUpdate")]
+    partial class ModelsUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

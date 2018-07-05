@@ -1,15 +1,31 @@
 ﻿.search-result-view {
-	.result-row {
+	.hz-result-row {
 		padding: 10px;
 		border-bottom: 1px solid #BFBFBF;
+		position: relative;
+
+		&:hover {
+			cursor: pointer;
+			background-color: #ECF0F1;
+		}
+
+		.hz-thumb {
+			position: absolute;
+			top: 0px;
+			right: 0px;
+			height: 100%;
+		}
 	}
 
-	.result-row:hover {
-		cursor: pointer;
+	.hz-search-tool-view {
 		background-color: #ECF0F1;
 	}
 }
 
-.search-tool-view {
-	background-color: #ECF0F1;
+.search-result-info {
+	width: 250px;
+
+	.hz-thumb {
+		float: left;
+	}
 }

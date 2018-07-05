@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace hzero.efcorecodefirst.Lib
 {
@@ -29,6 +30,19 @@ namespace hzero.efcorecodefirst.Lib
 				else
 				{
 					throw new NotImplementedException($"no logic written for the connection string provider {connectionString.Provider}");
+				}
+			}
+		}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			// Configure Model
+			// make sure the model has an empty constructor otherwis this will fail
+			foreach (IMutableEntityType entityType in modelBuilder.Model.GetEntityTypes())
+			{
+				if (typeof(IConfigureModel).IsAssignableFrom(entityType.ClrType))
+				{
+					((IConfigureModel)Activator.CreateInstance(entityType.ClrType)).Configure(modelBuilder);
 				}
 			}
 		}

@@ -5,7 +5,9 @@ Ext.define('CourtFinderApp.view.detail.DetailView', {
 
     requires: [
         'CourtFinderApp.view.detail.DetailViewController',
-        'CourtFinderApp.view.detail.DetailViewModel'
+        'CourtFinderApp.view.detail.DetailViewModel',
+
+        'CourtFinderApp.view.review.ReviewEntryView'
     ],
 
     controller: 'detail-detailview',
@@ -17,41 +19,74 @@ Ext.define('CourtFinderApp.view.detail.DetailView', {
         title: '{name}'
     },
     padding: 0,
+    scrollable: 'y',
     layout: 'vbox',
-    defaults: {
-        padding: 5
-    },
+    cls: 'detail-view',
     items: [{
-        padding: 0,
+        height: 200,
+        width: 400,
         bind: {
             html: '<img src="{thumbUrl}" />'
         }
     },{
         bind: {
             html: [
-                '<div class="detail-header">',
+                '<div class="hz-header">',
+                    '<div class="hz-go-link">',
+                        '<a href="http://www.google.com/maps/search/?api=1&query={lat},{lng}" target="_blank">',
+                            '<span class="x-fa fa-stack hz-go-link-icon">',
+                                '<span class="x-fa fa-circle fa-stack-2x"></span>',
+                                '<span class="x-fa fa-car fa-stack-1x fa-inverse"></span>',
+                            '</span>',
+                            '<h4>Go there</h4>',
+                        '</a>',
+                    '</div>',
                     '<div>',
                         '<span class="x-fa fa-star rating {hasRating1}"></span>',
                         '<span class="x-fa fa-star rating {hasRating2}"></span>',
                         '<span class="x-fa fa-star rating {hasRating3}"></span>',
                         '<span class="x-fa fa-star rating {hasRating4}"></span>',
                         '<span class="x-fa fa-star rating {hasRating5}"></span>',
+                        '<span> {rating} out of 5 ({ratingCount}) </span>',
                     '</div>',
-                    '<h4>{rating} out of 5 ({ratingCount})</h4>',
-                    '<h4>{formatLiteral}</h4>',
-                    '<h4>{locationLiteral}</h4>',
+                    '<div>{formatLiteral}</div>',
+                    '<div>{locationLiteral}</div>',
                 '</div>'
             ].join('')
         }
     }, {
-        flex: 1,
+        xtype: 'container',
+        padding: 5,
+        layout: 'hbox',
+        defaults: {
+            margin: '0 5 0 0'
+        },
+        items: [{
+            xtype: 'button',
+            ui: 'action',
+            text: 'Write Review',
+            handler: 'onWriteReviewClick'
+        }, {
+            xtype: 'selectfield',
+            bind: {
+                value: '{reviewSortBy}'
+            },
+            placeholder: 'sort by',
+            options: [
+                { text: 'Highest Rating First', value: 1 },
+                { text: 'Lowest Rating First', value: 2 }
+            ],
+            listeners: {
+                change: 'onReviewSortChange'
+            }
+        }]
+    }, {
         xtype: 'dataview',
-        scrollable: 'y',
         bind: {
             store: '{reviews}'
         },
         itemTpl: [
-            '<div class="review-row">',
+            '<div class="hz-review-row">',
                 '<h3>{reviewer}</h3>',
                 '<div>',
                     '<span class="x-fa fa-star rating {[ this.isChecked(1, values) ]}"></span>',
@@ -71,6 +106,7 @@ Ext.define('CourtFinderApp.view.detail.DetailView', {
     }],
 
     listeners: {
-        opened: 'onOpened'
+        opened: 'onOpened',
+        destroy: 'onDestroy'
     }
 });

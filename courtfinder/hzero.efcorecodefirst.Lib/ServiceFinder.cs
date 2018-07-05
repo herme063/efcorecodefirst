@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,32 +13,40 @@ namespace hzero.efcorecodefirst.Lib
 	{
 		private static IServiceProvider _provider;
 
-		static ServiceFinder()
-		{
-			Configure(new ServiceCollection());
-		}
-
 		public static void Configure(IServiceCollection services)
 		{
+			// for debuggin migration
+			//System.Diagnostics.Debugger.Launch();
+
 			services.AddTransient<IAppSettings>(sp => {
+				
+				var appSettings = new AppSettings();
 				IConfiguration configuration = new ConfigurationBuilder()
-					.AddJsonFile("appsettings.json", true, true)
+					.SetBasePath(Directory.GetCurrentDirectory())
+					.AddJsonFile("appsettings.json", false, true)
 					.Build();
-				var appSettings = configuration
-					.GetSection("efcorecodefirstSettings")
-					.Get<AppSettings>();
-				appSettings.ConnectionStrings = configuration
-					.GetSection("ConnectionStrings")
-					.Get<AppSettingsConnectionString[]>();
+				configuration.GetSection("efcorecodefirstSettings")
+					.Bind(appSettings);
 
 				return appSettings;
 			});
 
 			// find all class that implements IConfigureService
-			foreach (IConfigureService cfg in GetServiceConfigurators())
+			foreach (IConfigureService cfg in GetThings<IConfigureService>())
 			{
 				cfg.Configure(services);
 			}
+
+			// find all class that implements IConfigureMap
+			Mapper.Initialize(cfg =>
+			{
+				services.AddSingleton<IMapper>(sp => Mapper.Instance);
+
+				foreach (IConfigureMap configurator in GetThings<IConfigureMap>())
+				{
+					configurator.Configure(cfg);
+				}
+			});
 
 			_provider = services.BuildServiceProvider();
 		}
@@ -44,7 +54,7 @@ namespace hzero.efcorecodefirst.Lib
 		public static TService Find<TService>()
 			=> _provider != null ? _provider.GetService<TService>() : throw new InvalidOperationException("need to call Configure()");
 
-		private static IEnumerable<IConfigureService> GetServiceConfigurators()
+		internal static IEnumerable<TThingType> GetThings<TThingType>()
 		{
 			Assembly entryAssembly = Assembly.GetEntryAssembly();
 			foreach (AssemblyName assemblyName in new[] { entryAssembly.GetName() }
@@ -53,9 +63,9 @@ namespace hzero.efcorecodefirst.Lib
 				Assembly assembly = Assembly.Load(assemblyName);
 				foreach (var ti in assembly.DefinedTypes)
 				{
-					if (ti.IsClass && typeof(IConfigureService).IsAssignableFrom(ti))
+					if (ti.IsClass && typeof(TThingType).IsAssignableFrom(ti))
 					{
-						yield return (IConfigureService)assembly.CreateInstance(ti.FullName);
+						yield return (TThingType)assembly.CreateInstance(ti.FullName);
 					}
 				}
 			}

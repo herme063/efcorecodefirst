@@ -14,5 +14,6 @@ namespace hzero.efcorecodefirst.DataModel
 		public BasketballCourtFormats Format { get; set; }
 		public BasketballCourtLocations Location { get; set; }
 		public List<Rating> Ratings { get; set; }
+			= new List<Rating>();
 	}
 }

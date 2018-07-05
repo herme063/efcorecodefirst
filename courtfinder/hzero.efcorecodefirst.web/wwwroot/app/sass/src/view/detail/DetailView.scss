@@ -1,0 +1,29 @@
+﻿.detail-view {
+	.hz-header {
+		background-color: #ECF0F1;
+		padding: 10px 5px;
+
+		.hz-go-link {
+			float: right;
+			text-align: center;
+
+			.hz-go-link-icon {
+				font-size: 1.5em;
+			}
+
+			A {
+				color: $base-color !important;
+				text-decoration: none;
+
+				H4 {
+					font-weight: bold;
+				}
+			}
+		}
+	}
+
+	.hz-review-row {
+		padding: 10px 5px;
+		border-bottom: 1px solid #BFBFBF;
+	}
+}

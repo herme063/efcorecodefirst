@@ -27,7 +27,7 @@ Ext.define('CourtFinderApp.view.search.SearchView', {
         items: [{
             xtype: 'container',
             layout: 'hbox',
-            cls: 'search-tool-view',
+            cls: 'hz-search-tool-view',
             items: [{
                 flex: 1,
                 xtype: 'textfield',
@@ -55,8 +55,9 @@ Ext.define('CourtFinderApp.view.search.SearchView', {
                 scrollable: 'y',
                 emptyText: '(no court found nearby)',
                 cls: 'search-result-view',
-                itemTpl: [
-                    '<div class="result-row">',
+                itemTpl: new Ext.XTemplate(
+                    '<div class="hz-result-row">',
+                        '<img class="hz-thumb" src="../api/CourtFinder/GetCourtThumb?idx=0&uid={uid}" />',
                         '<h3>{location}</h3>',
                         '<div>',
                             '<span class="x-fa fa-star rating {[ this.isChecked(1, values) ]}"></span>',
@@ -72,7 +73,26 @@ Ext.define('CourtFinderApp.view.search.SearchView', {
                             return start <= values.rating ? 'checked' : '';
                         }
                     }
-                ],
+                ),
+                infoTpl: new Ext.XTemplate(
+                    '<div class="search-result-info">',
+                        '<img class="hz-thumb" src="../api/CourtFinder/GetCourtThumb?idx=0&uid={uid}" />',
+                        '<h3>{location}</h3>',
+                        '<div>',
+                            '<span class="x-fa fa-star rating {[ this.isChecked(1, values) ]}"></span>',
+                            '<span class="x-fa fa-star rating {[ this.isChecked(2, values) ]}"></span>',
+                            '<span class="x-fa fa-star rating {[ this.isChecked(3, values) ]}"></span>',
+                            '<span class="x-fa fa-star rating {[ this.isChecked(4, values) ]}"></span>',
+                            '<span class="x-fa fa-star rating {[ this.isChecked(5, values) ]}"></span>',
+                        '</div>',
+                        '<h4>{rating} out of 5 ({ratingCount})</h4>',
+                    '</div>',
+                    {
+                        isChecked: function (start, values) {
+                            return start <= values.rating ? 'checked' : '';
+                        }
+                    }
+                ),
                 listeners: {
                     select: 'onResultSelect'
                 }
