@@ -1,7 +1,8 @@
 $app-name:  dynamic( 'CourtFinderApp' );
-$image-search-path: 'D:/Open Source/__github/efcorecodefirst/courtfinder/hzero.efcorecodefirst.web/wwwroot/app/build/development/CourtFinderApp/resources';
+$image-search-path: '/home/hermez/Code/efcorecodefirst/courtfinder/hzero.efcorecodefirst.web/wwwroot/app/build/development/CourtFinderApp/resources';
 $theme-name:  dynamic( 'theme-material' );
 $include-courtfinderapp-application: dynamic(true);;
+$include-courtfinderapp-model-detail-courtreviewmodel: dynamic(true);;
 $include-courtfinderapp-model-search-searchresultmodel: dynamic(true);;
 $include-courtfinderapp-view-detail-detailview: dynamic(true);;
 $include-courtfinderapp-view-detail-detailviewcontroller: dynamic(true);;

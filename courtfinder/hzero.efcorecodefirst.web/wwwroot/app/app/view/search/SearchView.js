@@ -33,7 +33,8 @@ Ext.define('CourtFinderApp.view.search.SearchView', {
                 xtype: 'textfield',
                 itemId: 'locationField',
                 label: 'zip or city, state',
-                labelAlign: 'placeholder'
+                labelAlign: 'placeholder',
+                clearIcon: false
             }, {
                 xtype: 'button',
                 iconCls: 'x-fa fa-search',
