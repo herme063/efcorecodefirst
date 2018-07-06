@@ -41,5 +41,9 @@ Ext.define('CourtFinderApp.view.review.ReviewEntryView', {
             ui: 'decline',
             handler: 'onCancelClick'
         }]
-    }]
+    }],
+
+    listeners: {
+        opened: 'onOpened'
+    }
 });

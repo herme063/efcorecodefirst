@@ -22,11 +22,17 @@ Ext.define('CourtFinderApp.view.detail.DetailView', {
     scrollable: 'y',
     layout: 'vbox',
     cls: 'detail-view',
+
+    tools: [{
+        type: 'close',
+        handler: 'onCloseClick'
+    }],
+
     items: [{
         height: 200,
         width: 400,
         bind: {
-            html: '<img src="{thumbUrl}" />'
+            html: '<img src="{thumbUrl}" style="cursor: pointer;" />'
         }
     },{
         bind: {
@@ -68,9 +74,7 @@ Ext.define('CourtFinderApp.view.detail.DetailView', {
             handler: 'onWriteReviewClick'
         }, {
             xtype: 'selectfield',
-            bind: {
-                value: '{reviewSortBy}'
-            },
+            itemId: 'sortSelectField',
             placeholder: 'sort by',
             options: [
                 { text: 'Highest Rating First', value: 1 },
@@ -82,6 +86,7 @@ Ext.define('CourtFinderApp.view.detail.DetailView', {
         }]
     }, {
         xtype: 'dataview',
+        itemId: 'reviewDataView',
         bind: {
             store: '{reviews}'
         },

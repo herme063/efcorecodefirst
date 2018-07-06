@@ -2,11 +2,10 @@
  * This is is imported by virtue of "sass.etc" in "app.json".
  */
 .rating {
-    font-size: 1.2em;
-    color: black;
+	font-size: 1.2em;
+	color: black;
 
-    &.checked {
-        color: orangered;
-    }
+	&.checked {
+		color: orangered;
+	}
 }
-

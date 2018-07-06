@@ -14,8 +14,7 @@ Ext.define('CourtFinderApp.view.detail.DetailViewModel', {
         format: null,
         location: null,
         lat: null,
-        lng: null,
-        reviewSortBy: 1
+        lng: null
     },
     formulas: {
         thumbUrl: function (get) {
@@ -50,11 +49,7 @@ Ext.define('CourtFinderApp.view.detail.DetailViewModel', {
     stores: {
         reviews: {
             type: 'array',
-            model: 'CourtFinderApp.model.detail.CourtReviewModel',
-            sorters: [{
-                property: 'rating',
-                direction: 'DESC'
-            }]
+            model: 'CourtFinderApp.model.detail.CourtReviewModel'
         }
     }
 });

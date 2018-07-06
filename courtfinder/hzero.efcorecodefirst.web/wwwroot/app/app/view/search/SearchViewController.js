@@ -5,6 +5,13 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
     routes: {
         'search': 'onSearchRoute',
         'detail/:uid': 'onDetailRoute',
+        'inspect/:lat&:lng': {
+            action: 'onInspectRoute',
+            conditions: {
+                ':lat': '([0-9\.,-]+)',
+                ':lng': '([0-9\.,-]+)'
+            }
+        }
     },
 
     onSearchRoute: function () {
@@ -15,33 +22,47 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
 
     onDetailRoute: function (uid) {
         var me = this,
-            navigationView = me.getView().down('#navigationView'),
-            resultView = me.getView().down('#resultView'),
-            data = null;
-        resultView.getStore().getRange().forEach(function (r) {
-            if (data == null && r.data.uid === uid) {
-                data = r.data;
-            }
-        });
+            navigationView = me.getView().down('#navigationView');
+        navigationView.setActiveItem(1);
+        me.getView().down('#detailView').fireEvent('opened', uid);
+    },
 
-        if (data) {
-            navigationView.setActiveItem(1);
-            me.getView().down('#detailView').fireEvent('opened', data);
-        } else {
-            Ext.toast('Location details not found: ' + uid, 4000);
-            me.redirectTo('search');
-        }
+    onInspectRoute: function (lat, lng) {
+        var me = this,
+            navigationView = me.getView().down('#navigationView');
+        navigationView.setActiveItem(2);
+        me.getView().down('#inspectView').fireEvent('opened', lat, lng);
     },
 
     onPainted: function () {
         var me = this;
         me.getView().fireEvent('search', '600 N 1st Ave, Minneapolis, MN 55403'); // target center
+
+        var googleMap = me.getView().down('#mapView').getMap();
+        google.maps.event.addListener(googleMap, 'click', Ext.bind(me.onGoogleMapClick, me));
+    },
+
+    onGoogleMapClick: function (event) {
+        var me = this,
+            googleMap = me.getView().down('#mapView').getMap(),
+            data = {
+                lat: event.latLng.lat(),
+                lng: event.latLng.lng(),
+            };
+        me.toggleTempMarker(googleMap, data);
     },
 
     onSearch: function (location) {
         var me = this;
         if (location) {
             me.getGeocode(location);
+        }
+    },
+
+    onSearchKeyUp: function (field, e) {
+        var me = this;
+        if (e.event.keyCode === 13) {
+            me.getView().fireEvent('search', field.getValue());
         }
     },
 
@@ -57,8 +78,21 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
         this.redirectTo('detail/' + record.data.uid)
     },
 
-    onDetailBackClick: function () {
+    onDetailFinish: function () {
         this.redirectTo('search');
+    },
+
+    onInspectFinish: function () {
+        var me = this,
+            googleMap = me.getView().down('#mapView').getMap();
+        if (googleMap._tempMarker) {
+            google.maps.event.clearInstanceListeners(googleMap._tempMarker);
+            googleMap._tempMarker.setMap(null);
+
+            delete googleMap._tempMarker;
+        }
+
+        me.redirectTo('search');
     },
 
     getGeocode: function (location) {
@@ -152,9 +186,27 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
             m._infoWindow.open(googleMap, m);
         });
         m.addListener('mouseout', function () {
-           // m._infoWindow.close(googleMap, m);
+            m._infoWindow.close(googleMap, m);
         });
         (googleMap._markers || (googleMap._markers = [])).push(m);
+    },
+
+    toggleTempMarker: function (googleMap, data) {
+        var me = this;
+        if (googleMap._tempMarker) {
+            google.maps.event.clearInstanceListeners(googleMap._tempMarker);
+            googleMap._tempMarker.setMap(null);
+
+            delete googleMap._tempMarker;
+            me.redirectTo('search');
+        } else {
+            googleMap._tempMarker = new google.maps.Marker({
+                position: new google.maps.LatLng(data.lat, data.lng),
+                map: googleMap,
+                animation: google.maps.Animation.DROP
+            });
+            me.redirectTo('inspect/' + data.lat + '&' + data.lng);
+        }
     },
 
     getMarkerInfoTpl: function (data) {

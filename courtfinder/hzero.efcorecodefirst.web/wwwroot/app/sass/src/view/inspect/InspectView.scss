@@ -1,0 +1,25 @@
+﻿.inspect-view {
+	.hz-header {
+		background-color: #ECF0F1;
+		padding: 10px 5px;
+		height: 70px;
+
+		.hz-add-link {
+			float: right;
+			text-align: center;
+
+			.hz-add-link-icon {
+				font-size: 1.5em;
+			}
+
+			A {
+				color: $base-color !important;
+				text-decoration: none;
+
+				H4 {
+					font-weight: bold;
+				}
+			}
+		}
+	}
+}

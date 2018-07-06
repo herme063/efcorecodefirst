@@ -1,10 +1,11 @@
-Ext.define('CourtFinderApp.view.review.ReviewEntryViewController', {
+Ext.define('CourtFinderApp.view.entry.EntryViewController', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.review-reviewentryview',
+    alias: 'controller.entry-entryview',
 
-    onOpened: function (uid) {
+    onOpened: function (data) {
         var me = this;
-        me.getViewModel().set('uid', uid);
+        me.getViewModel().set(data)
+        me.getView().reset();
     },
 
     onSaveClick: function () {

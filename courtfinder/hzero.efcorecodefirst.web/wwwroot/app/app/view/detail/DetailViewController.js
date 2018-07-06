@@ -2,18 +2,10 @@ Ext.define('CourtFinderApp.view.detail.DetailViewController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.detail-detailview',
 
-    onOpened: function (data) {
+    onOpened: function (uid) {
         var me = this;
-        me.getViewModel().set({
-            uid: data.uid,
-            name: data.location,
-            rating: data.rating,
-            ratingCount: data.ratingCount,
-            lat: data.lat,
-            lng: data.lng
-        });
-        me.getCourtDetail(data.uid);
-        me.getCourtReviews(data.uid, 1, 100, 1);
+        me.getCourtDetail(uid);
+        me.getCourtReviews(uid, 1, 100, me.getView().down('#sortSelectField').getValue());
     },
 
     onDestroy: function (view) {
@@ -24,9 +16,14 @@ Ext.define('CourtFinderApp.view.detail.DetailViewController', {
         }
     },
 
+    onCloseClick: function () {
+        this.getView().fireEvent('discard');
+    },
+
     onWriteReviewClick: function (btn) {
         var me = this,
-            view = me.getView();
+            view = me.getView(),
+            uid = me.getViewModel().get('uid');
         if (!view._reviewEntryView) {
             view._reviewEntryView = Ext.Viewport.add({
                 xtype: 'review-reviewentryview',
@@ -45,19 +42,28 @@ Ext.define('CourtFinderApp.view.detail.DetailViewController', {
                     easing: 'ease-out'
                 },
                 centered: true,
-                width: 400
+                width: 400,
+                listeners: {
+                    save: function () {
+                        view._reviewEntryView.close();
+                        view.fireEvent('opened', uid);
+                    },
+                    cancel: function () {
+                        view._reviewEntryView.close();
+                    }
+                }
             });
         }
 
         view._reviewEntryView.setTitle('Review for ' + me.getViewModel().get('name'));
-        view._reviewEntryView.reset();
+        view._reviewEntryView.fireEvent('opened', uid);
         view._reviewEntryView.show();
     },
 
-    onReviewSortChange: function (btn) {
+    onReviewSortChange: function (field, newValue, oldValue) {
         var me = this,
-            sortBy = me.getViewModel().get('reviewSortBy');
-        me.getCourtReviews(data.uid, 1, 100, sortBy);
+            uid = me.getViewModel().get('uid');
+        me.getCourtReviews(uid, 1, 100, field.getValue());
     },
 
     getCourtDetail: function (uid) {
@@ -69,6 +75,12 @@ Ext.define('CourtFinderApp.view.detail.DetailViewController', {
             success: function (response, opts) {
                 var result = JSON.parse(response.responseText);
                 me.getViewModel().set({
+                    uid: result.uid,
+                    name: result.name,
+                    rating: result.rating,
+                    ratingCount: result.ratingCount,
+                    lat: result.lat,
+                    lng: result.lng,
                     format: result.format,
                     location: result.location
                 });
@@ -88,7 +100,7 @@ Ext.define('CourtFinderApp.view.detail.DetailViewController', {
 
             success: function (response, opts) {
                 var result = JSON.parse(response.responseText);
-                me.getViewModel().getStore('reviews').loadData(result);
+                me.getViewModel().getStore('reviews').loadData(result, false);
             },
 
             failure: function (response, opts) {

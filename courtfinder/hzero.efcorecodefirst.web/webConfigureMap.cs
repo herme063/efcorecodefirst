@@ -14,7 +14,7 @@ namespace hzero.efcorecodefirst.web
 				.ForMember(sr => sr.Location, opt => opt.MapFrom(ci => ci.Name));
 			cfg.CreateMap<ICourtReview, CourtReview>();
 			cfg.CreateMap<ICourtInfo, CourtDetail>()
-				.ForMember(cd => cd.CourtUid, opt => opt.MapFrom(ci => ci.Uid));
+				.ForMember(cd => cd.Rating, opt => opt.MapFrom(ci => ci.AvgRating));
 		}
 	}
 }

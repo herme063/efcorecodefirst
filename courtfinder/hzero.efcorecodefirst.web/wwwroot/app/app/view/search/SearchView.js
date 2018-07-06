@@ -9,7 +9,8 @@ Ext.define('CourtFinderApp.view.search.SearchView', {
         'CourtFinderApp.view.search.SearchViewModel',
         'CourtFinderApp.model.search.SearchResultModel',
 
-        'CourtFinderApp.view.detail.DetailView'
+        'CourtFinderApp.view.detail.DetailView',
+        'CourtFinderApp.view.inspect.InspectView',
     ],
 
     controller: 'search-searchview',
@@ -34,7 +35,10 @@ Ext.define('CourtFinderApp.view.search.SearchView', {
                 itemId: 'locationField',
                 label: 'zip or city, state',
                 labelAlign: 'placeholder',
-                clearIcon: false
+                clearIcon: false,
+                listeners: {
+                    keyup: 'onSearchKeyUp'
+                }
             }, {
                 xtype: 'button',
                 iconCls: 'x-fa fa-search',
@@ -77,15 +81,17 @@ Ext.define('CourtFinderApp.view.search.SearchView', {
                 infoTpl: new Ext.XTemplate(
                     '<div class="search-result-info">',
                         '<img class="hz-thumb" src="../api/CourtFinder/GetCourtThumb?idx=0&uid={uid}" />',
-                        '<h3>{location}</h3>',
-                        '<div>',
-                            '<span class="x-fa fa-star rating {[ this.isChecked(1, values) ]}"></span>',
-                            '<span class="x-fa fa-star rating {[ this.isChecked(2, values) ]}"></span>',
-                            '<span class="x-fa fa-star rating {[ this.isChecked(3, values) ]}"></span>',
-                            '<span class="x-fa fa-star rating {[ this.isChecked(4, values) ]}"></span>',
-                            '<span class="x-fa fa-star rating {[ this.isChecked(5, values) ]}"></span>',
+                        '<div class="hz-summary">',
+                            '<h4>{rating}</h4>',
+                            '<div>',
+                                '<span class="x-fa fa-star rating {[ this.isChecked(1, values) ]}"></span>',
+                                '<span class="x-fa fa-star rating {[ this.isChecked(2, values) ]}"></span>',
+                                '<span class="x-fa fa-star rating {[ this.isChecked(3, values) ]}"></span>',
+                                '<span class="x-fa fa-star rating {[ this.isChecked(4, values) ]}"></span>',
+                                '<span class="x-fa fa-star rating {[ this.isChecked(5, values) ]}"></span>',
+                            '</div>',
+                            '<h5>{ratingCount} review{[ values.ratingCount > 1 ? "s" : "" ]}</h5>',
                         '</div>',
-                        '<h4>{rating} out of 5 ({ratingCount})</h4>',
                     '</div>',
                     {
                         isChecked: function (start, values) {
@@ -99,12 +105,16 @@ Ext.define('CourtFinderApp.view.search.SearchView', {
             }, {
                 xtype: 'detail-detailview',
                 itemId: 'detailView',
-                tools: [{
-                    type: 'prev',
-                    handler: function (btn) {
-                        btn.up('search-searchview').getController().onDetailBackClick(btn);
-                    }
-                }]
+                listeners: {
+                    discard: 'onDetailFinish'
+                }
+            }, {
+                xtype: 'inspect-inspectview',
+                itemId: 'inspectView',
+                listeners: {
+                    added: 'onInspectFinish',
+                    discard: 'onInspectFinish'
+                }
             }]
         }]
     }, {

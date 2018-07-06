@@ -3,6 +3,7 @@
 		padding: 10px;
 		border-bottom: 1px solid #BFBFBF;
 		position: relative;
+		height: 80px;
 
 		&:hover {
 			cursor: pointer;
@@ -11,9 +12,9 @@
 
 		.hz-thumb {
 			position: absolute;
-			top: 0px;
-			right: 0px;
-			height: 100%;
+			top: 5px;
+			right: 5px;
+			height: 70px;
 		}
 	}
 
@@ -23,9 +24,28 @@
 }
 
 .search-result-info {
-	width: 250px;
+	width: 220px; // 140+5+75
+	height: 70px;
 
 	.hz-thumb {
 		float: left;
+		height: 100%;
+		margin-right: 5px;
+	}
+
+	.hz-summary {
+		display: inline-block;
+		height: 100%;
+
+		H4 {
+			color: orangered;
+			font-size: 2em;
+			text-align: center;
+		}
+
+		H5 {
+			font-size: 0.9em;
+			text-align: center;
+		}
 	}
 }

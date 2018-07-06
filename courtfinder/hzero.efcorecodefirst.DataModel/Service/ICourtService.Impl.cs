@@ -45,19 +45,16 @@ namespace hzero.efcorecodefirst.DataModel.Service
 			int size, 
 			CourtReviewSortDirections sort)
 		{
-			var query = MockData.Ratings
-				.Where(r => r.CourtUid == uid);
-			if (sort == CourtReviewSortDirections.HighestFirst)
-			{
-				query.OrderByDescending(r => (int)r.Score);
-			}
-			else
-			{
-				query.OrderBy(r => (int)r.Score);
-			}
-
-			List<CourtReview> result = query.Skip(page - 1).Take(size)
-				.Select(_mapper.Map<Rating, CourtReview>).ToList();
+			var direction = (sort == CourtReviewSortDirections.HighestFirst ? -1 : 1);
+			var comparer = Comparer<RatingScores>.Create((x, y) =>
+				direction * ((int)x < (int)y ? -1 : (int)x > (int)y ? 1 : 0));
+			List<CourtReview> result = MockData.Ratings
+				.Where(r => r.CourtUid == uid)
+				.OrderBy(r => r.Score, comparer)
+				.Skip((page - 1)*size)
+				.Take(size)
+				.Select(_mapper.Map<Rating, CourtReview>)
+				.ToList();
 
 			return result;
 		}
@@ -66,7 +63,7 @@ namespace hzero.efcorecodefirst.DataModel.Service
 		{
 			return MockData.Thumbs
 				.SingleOrDefault(t => t.CourtUid == uid && t.Index == index)
-				?.Content ?? new byte[0];
+				?.Content ?? MockData.NoThumb;
 		}
 
 		public byte[] GetCourtSnapshot(Guid uid, int index)
