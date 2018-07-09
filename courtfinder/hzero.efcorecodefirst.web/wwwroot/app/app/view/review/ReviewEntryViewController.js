@@ -5,11 +5,41 @@ Ext.define('CourtFinderApp.view.review.ReviewEntryViewController', {
     onOpened: function (uid) {
         var me = this;
         me.getViewModel().set('uid', uid);
+        me.getView().setRecord(Ext.create('CourtFinderApp.model.review.ReviewEntryModel', { 
+            uid: uid 
+        }));
     },
 
     onSaveClick: function () {
-        // todo: submit to the server
-        this.getView().fireEvent('save');
+        var me = this,
+            model = Ext.create('CourtFinderApp.model.review.ReviewEntryModel', Ext.apply({
+                uid: me.getViewModel().get('uid')
+            }, me.getView().getValues()));
+        if (model.isValid()) {
+            Ext.Ajax.request({
+                url: '../api/CourtFinder/AddReview?puid=00000000-0000-0000-0000-000000000001',
+                jsonData: model.getData(),
+                method: 'POST',
+
+                success: function (response) {
+                    me.getView().fireEvent('save');
+                },
+
+                failure: function (response) {
+                    Ext.toast('Server issue: ' + response.status + ' ' + response.statusText, 4000);
+                }
+            });
+        } else {
+            var errors = model.getValidation().getData(),
+                errorsFormatted = '<ul>' + Object.keys(errors).map(function (f) {
+                    if (errors[f] !== true) {
+                        return '<li>' + f + ' => ' + errors[f] + '</li>';
+                    } else {
+                        return '';
+                    }
+                }).join('') + '</ul>'
+            Ext.Msg.alert('Input Error', 'Please correct the following: ' + errorsFormatted);
+        }
     },
 
     onCancelClick: function () {

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using hzero.efcorecodefirst.DataModel;
@@ -9,9 +10,10 @@ using hzero.efcorecodefirst.DataModel;
 namespace hzero.efcorecodefirst.DataModel.Migrations
 {
     [DbContext(typeof(DataModelDbContext))]
-    partial class DataModelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180709191521_AddedOwnerOnCourt")]
+    partial class AddedOwnerOnCourt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,7 +42,8 @@ namespace hzero.efcorecodefirst.DataModel.Migrations
 
                     b.HasKey("Uid");
 
-                    b.HasIndex("AddedByUid");
+                    b.HasIndex("AddedByUid")
+                        .IsUnique();
 
                     b.ToTable("BasketballCourts");
                 });
@@ -107,8 +110,8 @@ namespace hzero.efcorecodefirst.DataModel.Migrations
             modelBuilder.Entity("hzero.efcorecodefirst.DataModel.BasketballCourt", b =>
                 {
                     b.HasOne("hzero.efcorecodefirst.DataModel.Player", "AddedBy")
-                        .WithMany()
-                        .HasForeignKey("AddedByUid")
+                        .WithOne()
+                        .HasForeignKey("hzero.efcorecodefirst.DataModel.BasketballCourt", "AddedByUid")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

@@ -5,7 +5,9 @@ Ext.define('CourtFinderApp.view.entry.EntryView', {
 
     requires: [
         'CourtFinderApp.view.entry.EntryViewController',
-        'CourtFinderApp.view.entry.EntryViewModel'
+        'CourtFinderApp.view.entry.EntryViewModel',
+
+        'CourtFinderApp.model.entry.EntryModel'
     ],
 
     controller: 'entry-entryview',
@@ -13,14 +15,27 @@ Ext.define('CourtFinderApp.view.entry.EntryView', {
         type: 'entry-entryview'
     },
 
+    defaults: {
+        required: true
+    },
     items: [{
         xtype: 'textfield',
         name: 'name',
         label: 'Name'
     }, {
+        xtype: 'numberfield',
+        name: 'lat',
+        label: 'Latitude',
+        readOnly: true
+    }, {
+        xtype: 'numberfield',
+        name: 'lng',
+        label: 'Longitude',
+        readOnly: true
+    }, {
         xtype: 'selectfield',
         name: 'format',
-        placeholder: 'Format',
+        label: 'Format',
         options: [
             { text: 'Full Court', value: 1 },
             { text: 'Half Court', value: 2 },
@@ -29,7 +44,7 @@ Ext.define('CourtFinderApp.view.entry.EntryView', {
     }, {
         xtype: 'selectfield',
         name: 'location',
-        placeholder: 'Location',
+        label: 'Location',
         options: [
             { text: 'Indoor', value: 1 },
             { text: 'Outdoor', value: 2 }
@@ -44,7 +59,8 @@ Ext.define('CourtFinderApp.view.entry.EntryView', {
         items: [{
             text: 'Save',
             ui: 'action',
-            handler: 'onSaveClick'
+            handler: 'onSaveClick',
+            formBind: true
         }, {
             text: 'Cancel',
             ui: 'decline',

@@ -14,5 +14,9 @@ namespace hzero.efcorecodefirst.DataModel.Service
 		byte[] GetCourtThumb(Guid uid, int index);
 
 		byte[] GetCourtSnapshot(Guid uid, int index);
+
+		int AddCourt(ICourtEntity entity, Guid playerUid);
+
+		int AddReview(IReviewEntity entity, Guid playerUid);
 	}
 }

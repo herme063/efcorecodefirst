@@ -6,5 +6,5 @@ dotnet ef migrations add <MigrationNameNoSpacePascalCase> -s hzero.efcorecodefir
 -- Remove an existing migration
 dotnet ef migrations remove <MigrationNameNoSpacePascalCase> -s hzero.efcorecodefirst.web\hzero.efcorecodefirst.web.csproj -p <TargetProjectPath>
 
--- Script out all migrations
-dotnet ef migrations script -s hzero.efcorecodefirst.web\hzero.efcorecodefirst.web.csproj -p <TargetProjectPath> -o <ScriptName>.sql
+-- Script out incrementatl migrations
+dotnet ef migrations script <PreviousMigration> -s hzero.efcorecodefirst.web\hzero.efcorecodefirst.web.csproj -p <TargetProjectPath> -o <ScriptName>.sql

@@ -21,6 +21,12 @@ namespace hzero.efcorecodefirst.DataModel
 				.ForMember(cr => cr.Rating, opt => opt.MapFrom(r => (int)r.Score))
 				.ForMember(cr => cr.Review, opt => opt.MapFrom(r => r.Comment))
 				.ForMember(cr => cr.TimestampUtc, opt => opt.MapFrom(r => r.Timestamp));
+			cfg.CreateMap<ICourtEntity, BasketballCourt>()
+				.ForMember(cr => cr.Address, opt => opt.MapFrom(r => r.Name))
+				.ForMember(cr => cr.Latitude, opt => opt.MapFrom(r => r.Lat))
+				.ForMember(cr => cr.Longitude, opt => opt.MapFrom(r => r.Lng));
+			cfg.CreateMap<IReviewEntity, Rating>()
+				.ForMember(cr => cr.Comment, opt => opt.MapFrom(r => r.Review));
 		}
 	}
 }

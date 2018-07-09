@@ -8,6 +8,7 @@ namespace hzero.efcorecodefirst.DataModel
 	{
 		public void Configure(IServiceCollection serviceCollection)
 		{
+			serviceCollection.AddTransient<ICourtDataAccess, CourtDataAccess>();
 			serviceCollection.AddTransient<ICourtService, CourtService>();
 		}
 	}

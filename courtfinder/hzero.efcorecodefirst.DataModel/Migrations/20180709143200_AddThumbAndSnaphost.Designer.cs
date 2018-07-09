@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using hzero.efcorecodefirst.DataModel;
@@ -9,9 +10,10 @@ using hzero.efcorecodefirst.DataModel;
 namespace hzero.efcorecodefirst.DataModel.Migrations
 {
     [DbContext(typeof(DataModelDbContext))]
-    partial class DataModelDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180709143200_AddThumbAndSnaphost")]
+    partial class AddThumbAndSnaphost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,10 +26,6 @@ namespace hzero.efcorecodefirst.DataModel.Migrations
                     b.Property<Guid>("Uid")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid>("AddedByUid");
-
-                    b.Property<DateTime>("AddedOn");
-
                     b.Property<string>("Address");
 
                     b.Property<int>("Format");
@@ -39,8 +37,6 @@ namespace hzero.efcorecodefirst.DataModel.Migrations
                     b.Property<decimal>("Longitude");
 
                     b.HasKey("Uid");
-
-                    b.HasIndex("AddedByUid");
 
                     b.ToTable("BasketballCourts");
                 });
@@ -102,14 +98,6 @@ namespace hzero.efcorecodefirst.DataModel.Migrations
                     b.HasIndex("PlayerUid");
 
                     b.ToTable("Ratings");
-                });
-
-            modelBuilder.Entity("hzero.efcorecodefirst.DataModel.BasketballCourt", b =>
-                {
-                    b.HasOne("hzero.efcorecodefirst.DataModel.Player", "AddedBy")
-                        .WithMany()
-                        .HasForeignKey("AddedByUid")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("hzero.efcorecodefirst.DataModel.BasketballCourtSnapshot", b =>

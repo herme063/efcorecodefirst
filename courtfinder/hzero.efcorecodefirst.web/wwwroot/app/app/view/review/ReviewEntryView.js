@@ -5,7 +5,9 @@ Ext.define('CourtFinderApp.view.review.ReviewEntryView', {
 
     requires: [
         'CourtFinderApp.view.review.ReviewEntryViewController',
-        'CourtFinderApp.view.review.ReviewEntryViewModel'
+        'CourtFinderApp.view.review.ReviewEntryViewModel',
+
+        'CourtFinderApp.model.review.ReviewEntryModel'
     ],
 
     controller: 'review-reviewentryview',

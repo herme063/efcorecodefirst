@@ -2,7 +2,7 @@
 using hzero.efcorecodefirst.Lib;
 using Microsoft.EntityFrameworkCore;
 
-namespace hzero.efcorecodefirst.DataModel.Service
+namespace hzero.efcorecodefirst.DataModel
 {
 	internal class BasketballCourtSnapshot : IConfigureModel
 	{

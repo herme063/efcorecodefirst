@@ -105,5 +105,25 @@ namespace hzero.efcorecodefirst.web.Controllers
 					_courtService.GetCourtSnapshot(uid, idx),
 					"image/jpeg");
 			});
+
+		[HttpPost]
+		[Route("AddCourt")]
+		public async Task<IActionResult> AddCourt(
+			[FromBody] CourtEntity entity,
+			[FromQuery] Guid puid) // todo: remove this once auth is implemented
+			=> await Task.Run(() =>
+			{
+				return new JsonResult(_courtService.AddCourt(entity, puid));
+			});
+
+		[HttpPost]
+		[Route("AddReview")]
+		public async Task<IActionResult> AddReview(
+			[FromBody] ReviewEntity entity,
+			[FromQuery] Guid puid) // todo: remove this once auth is implemented
+			=> await Task.Run(() =>
+			{
+				return new JsonResult(_courtService.AddReview(entity, puid));
+			});
 	}
 }

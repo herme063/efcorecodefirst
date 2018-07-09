@@ -3,6 +3,8 @@ $image-search-path: 'D:/Open Source/__github/efcorecodefirst/courtfinder/hzero.e
 $theme-name:  dynamic( 'theme-material' );
 $include-courtfinderapp-application: dynamic(true);;
 $include-courtfinderapp-model-detail-courtreviewmodel: dynamic(true);;
+$include-courtfinderapp-model-entry-entrymodel: dynamic(true);;
+$include-courtfinderapp-model-review-reviewentrymodel: dynamic(true);;
 $include-courtfinderapp-model-search-searchresultmodel: dynamic(true);;
 $include-courtfinderapp-view-detail-detailview: dynamic(true);;
 $include-courtfinderapp-view-detail-detailviewcontroller: dynamic(true);;

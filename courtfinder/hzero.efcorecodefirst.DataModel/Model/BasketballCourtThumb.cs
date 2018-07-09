@@ -2,7 +2,7 @@
 using hzero.efcorecodefirst.Lib;
 using Microsoft.EntityFrameworkCore;
 
-namespace hzero.efcorecodefirst.DataModel.Service
+namespace hzero.efcorecodefirst.DataModel
 {
 	internal class BasketballCourtThumb : IConfigureModel
 	{
@@ -13,7 +13,7 @@ namespace hzero.efcorecodefirst.DataModel.Service
 
 		void IConfigureModel.Configure(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<BasketballCourtSnapshot>()
+			modelBuilder.Entity<BasketballCourtThumb>()
 				.HasKey(s => new { s.CourtUid, s.Index });
 		}
 	}
