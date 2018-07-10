@@ -50,11 +50,11 @@ Ext.define('CourtFinderApp.view.inspect.InspectViewController', {
                 listeners: {
                     save: function () {
                         view._entryView.close();
-                        view.fireEvent('added');
+                        view.fireEvent('finished', 'add');
                     },
                     cancel: function () {
                         view._entryView.close();
-                        view.fireEvent('discard');
+                        view.fireEvent('finished', 'discard');
                     }
                 }
             });

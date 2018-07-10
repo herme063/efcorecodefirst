@@ -106,14 +106,13 @@ Ext.define('CourtFinderApp.view.search.SearchView', {
                 xtype: 'detail-detailview',
                 itemId: 'detailView',
                 listeners: {
-                    discard: 'onDetailFinish'
+                    finished: 'onDetailFinished'
                 }
             }, {
                 xtype: 'inspect-inspectview',
                 itemId: 'inspectView',
                 listeners: {
-                    added: 'onInspectFinish',
-                    discard: 'onInspectFinish'
+                    finished: 'onInspectFinished'
                 }
             }]
         }]

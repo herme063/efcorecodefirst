@@ -78,11 +78,14 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
         this.redirectTo('detail/' + record.data.uid)
     },
 
-    onDetailFinish: function () {
-        this.redirectTo('search');
+    onDetailFinished: function (action) {
+        var me = this,
+            googleMap = me.getView().down('#mapView').getMap();
+        me.redirectTo('search');
+        me.findCourtsWithinBounds(googleMap);
     },
 
-    onInspectFinish: function () {
+    onInspectFinished: function (action) {
         var me = this,
             googleMap = me.getView().down('#mapView').getMap();
         if (googleMap._tempMarker) {
@@ -93,6 +96,10 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
         }
 
         me.redirectTo('search');
+
+        if (action == 'add') {
+            me.findCourtsWithinBounds(googleMap);
+        }
     },
 
     getGeocode: function (location) {
@@ -118,10 +125,14 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
         });
     },
 
-    findCourtsWithinBounds: function (sw, ne) {
+    findCourtsWithinBounds: function (googleMap) {
         var me = this,
             resultView = me.getView().down('#resultView'),
-            googleMap = me.getView().down('#mapView').getMap();
+            bounds = googleMap.getBounds(),
+            swBound = bounds.getSouthWest(),
+            neBound = bounds.getNorthEast(),
+            sw = { lat: swBound.lat(), lng: swBound.lng() },
+            ne = { lat: neBound.lat(), lng: neBound.lng() };
         Ext.Ajax.request({
             url: '../api/CourtFinder/FindCourts',
             method: 'POST',
@@ -226,13 +237,7 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
         var me = this;
         me.removeIdleListener(googleMap);
         googleMap._idleListener = googleMap.addListener('idle', function () {
-            var bounds = googleMap.getBounds(),
-                swBound = bounds.getSouthWest(),
-                neBound = bounds.getNorthEast();
-            me.findCourtsWithinBounds(
-                { lat: swBound.lat(), lng: swBound.lng() },
-                { lat: neBound.lat(), lng: neBound.lng() }
-            );
+            me.findCourtsWithinBounds(googleMap);
         });
     }
 });

@@ -17,7 +17,7 @@ Ext.define('CourtFinderApp.view.detail.DetailViewController', {
     },
 
     onCloseClick: function () {
-        this.getView().fireEvent('discard');
+        this.getView().fireEvent('finished', 'close');
     },
 
     onWriteReviewClick: function (btn) {
