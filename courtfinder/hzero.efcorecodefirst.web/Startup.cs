@@ -39,8 +39,12 @@ namespace hzero.efcorecodefirst.web
 				app.UseHttpsRedirection();
 				app.UseHsts();
 			}
-
-			app.UseMvc();
+			app.UseAuthentication();
+			app.UseMvc(routes =>
+			{
+				routes.MapRoute("webapi", "api/{controller}/{action=Get}");
+				routes.MapRoute("default", "{controller}/{action}/{id?}");
+			});
 		}
 	}
 }

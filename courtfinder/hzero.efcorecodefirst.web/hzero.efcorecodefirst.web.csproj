@@ -12,6 +12,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\app\bootstrap.css" />
+    <Content Remove="wwwroot\app\bootstrap.js" />
+    <Content Remove="wwwroot\app\bootstrap.json" />
+    <Content Remove="wwwroot\app\bootstrap.jsonp" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\app\overrides\" />
     <Folder Include="wwwroot\app\packages\" />
   </ItemGroup>

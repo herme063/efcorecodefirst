@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace hzero.efcorecodefirst.web.Controllers
 {
-	[Route("api/[controller]")]
+	//[Route("api/[controller]")]
 	public class CourtFinderController : Controller
 	{
 		private readonly IGeoHelper _geoHelper;
@@ -28,7 +28,7 @@ namespace hzero.efcorecodefirst.web.Controllers
 		}
 
 		[HttpPost]
-		[Route("FindCourts")]
+		//[Route("FindCourts")]
 		public async Task<IActionResult> FindCourts(
 			[FromForm]decimal swLat,
 			[FromForm]decimal swLng,
@@ -41,7 +41,7 @@ namespace hzero.efcorecodefirst.web.Controllers
 			);
 
 		[HttpPost]
-		[Route("FindLocation")]
+		//[Route("FindLocation")]
 		public async Task<IActionResult> FindLocation(
 			[FromForm]string location)
 			=> await Task.Run(() =>
@@ -60,7 +60,7 @@ namespace hzero.efcorecodefirst.web.Controllers
 			});[HttpPost]
 
 		[HttpGet]
-		[Route("GetCourtDetail")]
+		//[Route("GetCourtDetail")]
 		public async Task<IActionResult> GetCourtDetail(
 			[FromQuery]Guid uid)
 			=> await Task.Run(() =>
@@ -69,7 +69,7 @@ namespace hzero.efcorecodefirst.web.Controllers
 			});
 
 		[HttpGet]
-		[Route("GetCourtReviews")]
+		//[Route("GetCourtReviews")]
 		public async Task<IActionResult> GetCourtReviews(
 			[FromQuery]Guid uid,
 			[FromQuery]int page,
@@ -83,7 +83,7 @@ namespace hzero.efcorecodefirst.web.Controllers
 			});
 
 		[HttpGet]
-		[Route("GetCourtThumb")]
+		//[Route("GetCourtThumb")]
 		public async Task<IActionResult> GetCourtThumb(
 			[FromQuery]Guid uid,
 			[FromQuery]int idx)
@@ -95,7 +95,7 @@ namespace hzero.efcorecodefirst.web.Controllers
 			});
 
 		[HttpGet]
-		[Route("GetCourtSnapshot")]
+		//[Route("GetCourtSnapshot")]
 		public async Task<IActionResult> GetCourtSnapshot(
 			[FromQuery]Guid uid,
 			[FromQuery]int idx)
@@ -107,7 +107,7 @@ namespace hzero.efcorecodefirst.web.Controllers
 			});
 
 		[HttpPost]
-		[Route("AddCourt")]
+		//[Route("AddCourt")]
 		public async Task<IActionResult> AddCourt(
 			[FromBody] CourtEntity entity,
 			[FromQuery] Guid puid) // todo: remove this once auth is implemented
@@ -117,7 +117,7 @@ namespace hzero.efcorecodefirst.web.Controllers
 			});
 
 		[HttpPost]
-		[Route("AddReview")]
+		//[Route("AddReview")]
 		public async Task<IActionResult> AddReview(
 			[FromBody] ReviewEntity entity,
 			[FromQuery] Guid puid) // todo: remove this once auth is implemented
