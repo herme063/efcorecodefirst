@@ -91,7 +91,8 @@ namespace hzero.efcorecodefirst.DataModel.Service
 			}
 		}
 
-		public int InsertCourt(BasketballCourt entity)
+		public int InsertCourt(
+			BasketballCourt entity)
 		{
 			using (var dbContext = new DataModelDbContext())
 			{
@@ -101,7 +102,8 @@ namespace hzero.efcorecodefirst.DataModel.Service
 			}
 		}
 
-		public int SaveReview(Rating entity)
+		public int SaveReview(
+			Rating entity)
 		{
 			using (var dbContext = new DataModelDbContext())
 			{
