@@ -287,6 +287,30 @@
         "modelNamespace": "CourtFinderApp.model",
         "name": "review.ReviewEntryModel"
       }
+    },
+    "app/model/auth/LoginModel.js": {
+      "source": "{modelFileName}.js.tpl.merge",
+      "version": "31d5356142a167c72422f7902f19df3c583f3249",
+      "parameters": {
+        "appName": "CourtFinderApp",
+        "baseClass": "Ext.data.Model",
+        "fields": "Email:string:null,Password:string:null",
+        "modelFileName": "auth/LoginModel",
+        "modelNamespace": "CourtFinderApp.model",
+        "name": "auth.LoginModel"
+      }
+    },
+    "app/model/auth/SignUpModel.js": {
+      "source": "{modelFileName}.js.tpl.merge",
+      "version": "31d5356142a167c72422f7902f19df3c583f3249",
+      "parameters": {
+        "appName": "CourtFinderApp",
+        "baseClass": "Ext.data.Model",
+        "fields": "email:string:null,password:string:null,confirmPassword:string:null,playerName:string:null",
+        "modelFileName": "auth/SignUpModel",
+        "modelNamespace": "CourtFinderApp.model",
+        "name": "auth.SignUpModel"
+      }
     }
   }
 }

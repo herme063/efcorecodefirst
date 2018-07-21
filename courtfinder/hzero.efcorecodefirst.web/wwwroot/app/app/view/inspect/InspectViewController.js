@@ -20,7 +20,7 @@ Ext.define('CourtFinderApp.view.inspect.InspectViewController', {
 
     onCloseClick: function () {
         var me = this;
-        me.getView().fireEvent('discard');
+        me.getView().fireEvent('finished');
     },
 
     onAddClick: function (btn) {

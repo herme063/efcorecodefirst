@@ -9,3 +9,33 @@
 		color: orangered;
 	}
 }
+
+.x-tool-user {
+	&:before {
+		content: 'account_circle';
+		font-feature-settings: 'baseline';
+	}
+
+	font-family: 'Material Icons';
+	line-height: 1;
+}
+
+.x-tool-useradd {
+	&:before {
+		content: 'person_add';
+		font-feature-settings: 'baseline';
+	}
+
+	font-family: 'Material Icons';
+	line-height: 1;
+}
+
+.login-link {
+	display: block;
+	margin-bottom: 5px;
+	text-decoration: none;
+
+	&:active, &:visited {
+		color: $base-color;
+	}
+}

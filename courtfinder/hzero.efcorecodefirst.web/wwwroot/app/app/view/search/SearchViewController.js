@@ -21,25 +21,34 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
     },
 
     onDetailRoute: function (uid) {
-        var me = this,
-            navigationView = me.getView().down('#navigationView');
+        var me = this;
+        me.expandCollapseSearchPanel(false);
+
+        var navigationView = me.getView().down('#navigationView');
         navigationView.setActiveItem(1);
         me.getView().down('#detailView').fireEvent('opened', uid);
     },
 
     onInspectRoute: function (lat, lng) {
-        var me = this,
-            navigationView = me.getView().down('#navigationView');
+        var me = this;
+        me.expandCollapseSearchPanel(false);
+        
+        var navigationView = me.getView().down('#navigationView');
         navigationView.setActiveItem(2);
         me.getView().down('#inspectView').fireEvent('opened', lat, lng);
+
+        var googleMap = me.getView().down('#mapView').getMap();
+        if (!googleMap._tempMarker) {
+            me.toggleTempMarker(googleMap, { lat: lat, lng: lng });
+            googleMap.panTo(googleMap._tempMarker.getPosition()); // setCenter ain't working
+        }
     },
 
     onPainted: function () {
-        var me = this;
-        me.getView().fireEvent('search', '600 N 1st Ave, Minneapolis, MN 55403'); // target center
-
-        var googleMap = me.getView().down('#mapView').getMap();
-        google.maps.event.addListener(googleMap, 'click', Ext.bind(me.onGoogleMapClick, me));
+        var me = this,
+            googleMap = me.getView().down('#mapView').getMap();
+        googleMap.addListener('click', Ext.bind(me.onGoogleMapClick, me));
+        me.addIdleListener(googleMap);
     },
 
     onGoogleMapClick: function (event) {
@@ -49,7 +58,11 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
                 lat: event.latLng.lat(),
                 lng: event.latLng.lng(),
             };
-        me.toggleTempMarker(googleMap, data);
+        if (me.toggleTempMarker(googleMap, data)) {
+            me.redirectTo('inspect/' + data.lat + '&' + data.lng, true);
+        } else {
+            me.redirectTo('search');
+        }
     },
 
     onSearch: function (location) {
@@ -82,7 +95,6 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
         var me = this,
             googleMap = me.getView().down('#mapView').getMap();
         me.redirectTo('search');
-        me.findCourtsWithinBounds(googleMap);
     },
 
     onInspectFinished: function (action) {
@@ -100,6 +112,16 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
         if (action == 'add') {
             me.findCourtsWithinBounds(googleMap);
         }
+    },
+
+    onSearchResultExpandClick: function () {
+        var me = this;
+        me.expandCollapseSearchPanel(false);
+    },
+
+    onSearchResultCollapseClick: function () {
+        var me = this;
+        me.expandCollapseSearchPanel(true);
     },
 
     getGeocode: function (location) {
@@ -146,13 +168,7 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
             success: function (response, opts) {
                 var result = JSON.parse(response.responseText);
                 resultView.getStore().loadData(result);
-                me.clearMarkers(googleMap);
-
-                result.forEach(function (r) {
-                    me.addMarker(googleMap, r);
-                });
-
-                //me.redirectTo('search');
+                me.mergeMarkers(googleMap, result);
             },
 
             failure: function (response, opts) {
@@ -161,22 +177,28 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
         });
     },
 
-    clearMarkers: function (googleMap) {
-        // todo: remove all markers
-        if (googleMap._markers) {
-            googleMap._markers.forEach(function (m) {
-                google.maps.event.clearInstanceListeners(m);
-                m._infoWindow.close();
-                delete m._infoWindow;
-                m.setMap(null);
+    mergeMarkers: function (googleMap, data) {
+        var me = this;
+        googleMap._markers = CourtFinderApp.EnumerableService.fullOuterJoin(
+            googleMap._markers || [],
+            data,
+            function (m) { return m._data.uid; },
+            function (d) { return d.uid; },
+            function (left, right) {
+                var result = null;
+                if (right === null) {
+                    me.deleteMarker(left);
+                } else {
+                    result = left || me.createMarker(googleMap, right);
+                }
+
+                return result;
             });
-            googleMap._markers = [];
-        }
     },
 
-    addMarker: function (googleMap, data) {
-        var me = this,
-            m = new google.maps.Marker({
+    createMarker: function (googleMap, data) {
+        var me = this, 
+            result = new google.maps.Marker({
                 position: new google.maps.LatLng(data.lat, data.lng),
                 map: googleMap,
                 label: {
@@ -190,34 +212,47 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
                 }),
                 _data: data
             });
-        m.addListener('click', function () {
-            me.redirectTo('detail/' + m._data.uid);
+        result.addListener('click', function () {
+            me.redirectTo('detail/' + result._data.uid, true);
         });
-        m.addListener('mouseover', function () {
-            m._infoWindow.open(googleMap, m);
+        result.addListener('mouseover', function () {
+            result._infoWindow.open(googleMap, result);
         });
-        m.addListener('mouseout', function () {
-            m._infoWindow.close(googleMap, m);
+        result.addListener('mouseout', function () {
+            result._infoWindow.close(googleMap, result);
         });
-        (googleMap._markers || (googleMap._markers = [])).push(m);
+
+        return result;
+    },
+
+    deleteMarker: function (marker) {
+        google.maps.event.clearInstanceListeners(marker);
+        marker._infoWindow.close();
+        delete marker._infoWindow;
+        marker.setMap(null);
     },
 
     toggleTempMarker: function (googleMap, data) {
-        var me = this;
+        var me = this,
+            toggled = true;
         if (googleMap._tempMarker) {
             google.maps.event.clearInstanceListeners(googleMap._tempMarker);
             googleMap._tempMarker.setMap(null);
 
             delete googleMap._tempMarker;
-            me.redirectTo('search');
+            toggled = false;
         } else {
             googleMap._tempMarker = new google.maps.Marker({
                 position: new google.maps.LatLng(data.lat, data.lng),
                 map: googleMap,
                 animation: google.maps.Animation.DROP
             });
-            me.redirectTo('inspect/' + data.lat + '&' + data.lng);
+            googleMap._tempMarker.addListener('click', function () {
+                me.redirectTo('inspect/' + data.lat + '&' + data.lng, true);
+            });
         }
+
+        return toggled;
     },
 
     getMarkerInfoTpl: function (data) {
@@ -239,5 +274,16 @@ Ext.define('CourtFinderApp.view.search.SearchViewController', {
         googleMap._idleListener = googleMap.addListener('idle', function () {
             me.findCourtsWithinBounds(googleMap);
         });
+    },
+
+    expandCollapseSearchPanel: function (collapsed) {
+        var view = this.getView();
+        if (collapsed) {
+            view.down('#searchPanel').addCls('hz-collapsed');
+            view.down('#searchPanelCollapseExpandCt').addCls('hz-collapsed');
+        } else {
+            view.down('#searchPanel').removeCls('hz-collapsed');
+            view.down('#searchPanelCollapseExpandCt').removeCls('hz-collapsed');
+        }
     }
 });

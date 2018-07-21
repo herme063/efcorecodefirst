@@ -14,7 +14,10 @@ Ext.define('CourtFinderApp.view.main.Main', {
 
         'CourtFinderApp.view.main.MainController',
         'CourtFinderApp.view.main.MainModel',
-        'CourtFinderApp.view.search.SearchView'
+        'CourtFinderApp.view.search.SearchView',
+
+        'CourtFinderApp.view.auth.LoginView',
+        'CourtFinderApp.model.auth.LoginModel'
     ],
 
     controller: 'main',
@@ -29,6 +32,24 @@ Ext.define('CourtFinderApp.view.main.Main', {
 
     title: 'Court Finder 9000',
     layout: 'fit',
+
+    tools: [{
+        type: 'user',
+        tooltip: 'Sign In',
+        bind: {
+            hidden: '{isLoggedIn}'
+        },
+        handler: 'onSignInClick'
+    }, {
+        type: 'user',
+        bind: {
+            tooltip: '{loggedName}',
+            hidden: '{!isLoggedIn}'
+        },
+        menu: [{
+            text: 'hey'
+        }]
+    }],
 
     items: [{
         xtype: 'search-searchview',

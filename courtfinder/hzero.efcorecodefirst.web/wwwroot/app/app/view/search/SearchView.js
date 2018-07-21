@@ -19,12 +19,14 @@ Ext.define('CourtFinderApp.view.search.SearchView', {
     },
 
     layout: 'hbox',
+
     items: [{
         xtype: 'panel',
         width: 400,
         padding: 0,
         layout: 'vbox',
-        collapsible: true,
+        itemId: 'searchPanel',
+        cls: 'search-panel',
         items: [{
             xtype: 'container',
             layout: 'hbox',
@@ -41,6 +43,7 @@ Ext.define('CourtFinderApp.view.search.SearchView', {
                 }
             }, {
                 xtype: 'button',
+                style: 'font-size: 16px;',
                 iconCls: 'x-fa fa-search',
                 handler: 'onSearchClick'
             }]
@@ -118,8 +121,50 @@ Ext.define('CourtFinderApp.view.search.SearchView', {
         }]
     }, {
         flex: 1,
-        xtype: 'map',
-        itemId: 'mapView'
+        xtype: 'container',
+        layout: 'fit',
+        items: [{
+            xtype: 'container',
+            cls: 'search-panel-collapse-expand-ct',
+            itemId: 'searchPanelCollapseExpandCt',
+            layout: {
+                type: 'vbox',
+                pack: 'start'
+            },
+            items: [{
+                cls: 'expander',
+                html: '<i class="fa fa-search"></i>',
+                tooltip: 'show search tool',
+                listeners: {
+                    click: {
+                        element: 'element',
+                        preventDefault: true,
+                        fn: 'onSearchResultExpandClick'
+                    }
+                }
+            }, {
+                cls: 'collapser',
+                html: '<i class="fa fa-caret-left"></i>',
+                tooltip: 'hide search tool',
+                listeners: {
+                    click: {
+                        element: 'element',
+                        preventDefault: true,
+                        fn: 'onSearchResultCollapseClick'
+                    }
+                }
+            }]
+        }, {
+            xtype: 'map',
+            itemId: 'mapView',
+            options: {
+                center: { 
+                    // target center
+                    lat: 44.97946204601796,
+                    lng: -93.27620029449463
+                }
+            }
+        }]
     }],
 
     listeners: {

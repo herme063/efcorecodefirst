@@ -16,6 +16,14 @@ Ext.define('CourtFinderApp.Application', {
         }
     },
 
+    requires: [
+        'CourtFinderApp.utils.AuthService',
+        'CourtFinderApp.utils.FormService',
+        'CourtFinderApp.utils.EnumerableService',
+
+        'CourtFinderApp.utils.ConfirmPasswordValidator'
+    ],
+
     stores: [
         // TODO: add global / shared stores here
     ],

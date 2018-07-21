@@ -32,15 +32,7 @@ Ext.define('CourtFinderApp.view.entry.EntryViewController', {
                 }
             });
         } else {
-            var errors = model.getValidation().getData(),
-                errorsFormatted = '<ul>' + Object.keys(errors).map(function (f) {
-                    if (errors[f] !== true) {
-                        return '<li>' + f + ' => ' + errors[f] + '</li>';
-                    } else {
-                        return '';
-                    }
-                }).join('') + '</ul>'
-            Ext.Msg.alert('Input Error', 'Please correct the following: ' + errorsFormatted);
+            CourtFinderApp.FormService.raiseErrors(me.getView(), model);
         }
     },
 

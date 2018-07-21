@@ -49,3 +49,49 @@
 		}
 	}
 }
+
+.search-panel {
+	&.hz-collapsed {
+		display: none;
+	}
+}
+
+%collapse-expand-shared {
+	font-size: 20px;
+	height: 100%;
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.search-panel-collapse-expand-ct {
+	background-color: white;
+	height: 40px;
+	width: 40px;
+	padding: 0px;
+	z-index: 2;
+	color: $base-color;
+	cursor: pointer;
+
+	.x-container-inner {
+		display: table;
+	}
+
+	&.hz-collapsed {
+		.expander {
+			@extend %collapse-expand-shared
+		}
+	
+		.collapser {
+			display: none;
+		}
+	}
+
+	.expander {
+		display: none;
+	}
+
+	.collapser {
+		@extend %collapse-expand-shared
+	}
+}
